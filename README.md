@@ -1,6 +1,6 @@
 # ResNeXt in Tensorflow
 
-This is an implementation of [ResNext](https://arxiv.org/abs/1611.05431) in tensorflow. The tensorboard visualization of the detailed model structure (ResNeXt-29, 4x64d as example)is shown in [graph](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph.png), [block](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block.png), and [split](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block_split.png)
+This is an implementation of [ResNext](https://arxiv.org/abs/1611.05431) in tensorflow. The tensorboard visualization of the detailed model structure (ResNeXt-29, 4x64d as example) is shown in [graph](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph.png), [block](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block.png), and [split](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block_split.png)
 
 I used the method in Figure 3b of the paper to implement, as there is no grouped convolution functions in the current version of tensorflow yet. (I am going check the difference of speed between Figure 3b and Figure 3c. If Figure 3b is dramatically slower, I will see if I can implement grouped convolutions myself.)
 

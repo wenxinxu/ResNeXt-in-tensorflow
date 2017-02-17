@@ -229,3 +229,4 @@ def test_graph(train_dir='logs'):
     sess.run(init)
     summary_writer = tf.train.SummaryWriter(train_dir, sess.graph)
 
+# test_graph()

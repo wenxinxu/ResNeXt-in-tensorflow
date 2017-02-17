@@ -7,7 +7,7 @@ FLAGS = tf.app.flags.FLAGS
 
 ## The following flags define hyper-parameters that specifically characterize ResNeXt
 
-tf.app.flags.DEFINE_integer('cardinality', 2, '''Cadinality, number of paths in each block''')
+tf.app.flags.DEFINE_integer('cardinality', 4, '''Cadinality, number of paths in each block''')
 tf.app.flags.DEFINE_integer('block_unit_depth', 64, '''the depth of each split. 64 for cifar10
 in Figure 7 of the paper''')
 
@@ -16,7 +16,7 @@ in Figure 7 of the paper''')
 
 tf.app.flags.DEFINE_string('version', 'test', '''A version number defining the directory to save
 logs and checkpoints''')
-tf.app.flags.DEFINE_integer('report_freq', 3, '''Steps takes to output errors on the screen
+tf.app.flags.DEFINE_integer('report_freq', 391, '''Steps takes to output errors on the screen
 and write summaries''')
 tf.app.flags.DEFINE_float('train_ema_decay', 0.95, '''The decay factor of the train error's
 moving average shown on tensorboard''')
@@ -28,7 +28,7 @@ tf.app.flags.DEFINE_integer('train_steps', 80000, '''Total steps that you want t
 tf.app.flags.DEFINE_boolean('is_full_validation', False, '''Validation w/ full validation set or
 a random batch''')
 tf.app.flags.DEFINE_integer('train_batch_size', 128, '''Train batch size''')
-tf.app.flags.DEFINE_integer('validation_batch_size', 25, '''Validation batch size, better to be
+tf.app.flags.DEFINE_integer('validation_batch_size', 125, '''Validation batch size, better to be
 a divisor of 10000 for this task''')
 tf.app.flags.DEFINE_integer('test_batch_size', 125, '''Test batch size''')
 

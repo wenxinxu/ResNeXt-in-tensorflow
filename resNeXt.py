@@ -13,6 +13,7 @@ BN_EPSILON = 0.001
 
 def activation_summary(x):
     '''
+    Add histogram and sparsity summaries of a tensor to tensorboard
     :param x: A Tensor
     :return: Add histogram summary and scalar summary of the sparsity of the tensor
     '''
@@ -23,6 +24,7 @@ def activation_summary(x):
 
 def create_variables(name, shape, initializer=tf.contrib.layers.xavier_initializer(), is_fc_layer=False):
     '''
+    Create a variable with tf.get_variable()
     :param name: A string. The name of the new variable
     :param shape: A list of dimensions
     :param initializer: User Xavier as default.
@@ -44,6 +46,7 @@ def create_variables(name, shape, initializer=tf.contrib.layers.xavier_initializ
 
 def output_layer(input_layer, num_labels):
     '''
+    Generate the output layer
     :param input_layer: 2D tensor
     :param num_labels: int. How many output labels in total? (10 for cifar10 and 100 for cifar100)
     :return: output layer Y = WX + B
@@ -143,6 +146,13 @@ def bottleneck_b(input_layer, stride):
 
 
 def bottleneck_c(input_layer, stride):
+    '''
+    The bottleneck strucutre in Figure 3c. Grouped convolutions
+    :param input_layer: 4D tensor in shape of [batch_size, input_height, input_width,
+    input_channel]
+    :param stride: int. 1 or 2. If want to shrink the image size, then stride = 2
+    :return: 4D tensor in shape of [batch_size, output_height, output_width, output_channel]
+    '''
     input_channel = input_layer.get_shape().as_list()[-1]
     bottleneck_depth = FLAGS.block_unit_depth
     with tf.variable_scope('bottleneck_c_l1'):

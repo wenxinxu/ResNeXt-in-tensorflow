@@ -1,8 +1,10 @@
 # ResNeXt in Tensorflow
 
-This is an implementation of [ResNext](https://arxiv.org/abs/1611.05431) in tensorflow. The tensorboard visualization of the detailed model structure (ResNeXt-29, 4x64d as example) is shown in [graph](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph.png), [block](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block.png), and [split](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block_split.png)
+This is an implementation of [ResNext](https://arxiv.org/abs/1611.05431) in tensorflow. The tensorboard visualization of the detailed model structure (ResNeXt-29, 4x64d as example) is shown in [graph](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph.png), [block](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block.png), and [split](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block_split.png). 
 
-I used the method in Figure 3b of the paper to implement, as there is no grouped convolution functions in the current version of tensorflow yet. (I am going check the difference of speed between Figure 3b and Figure 3c. If Figure 3b is dramatically slower, I will see if I can implement grouped convolutions myself.)
+I implemented the blocks with both methods in Figure 3b (split->concat) and Figure 3c (grouped convolutions). The grouped conv method almost doubles the speed of the split-and-concat. 
+
+tensorflow 1.0.0 is needed here. They re-named lots of functions, so the previous versions won't work...
 
 ## Quick guide
 
@@ -24,4 +26,8 @@ More explanations about the hyper-parameters can be found [here](https://github.
 
 ## TODO:
 1. Train the model and generate the learning curve
-2. Figure out how much slower the 'split-concatenate' method is than the grouped convolutions. (Compare Figure 3b to Figure 3c) 
+2. Data augmentation: cv2 is not compatible w/ tensorflow 1.0.0, so I need to:
+    a. Wait for a new version of opencv
+    or
+    b. Use the queueRunner in tensorflow as data I/O and implement data augmentaion
+

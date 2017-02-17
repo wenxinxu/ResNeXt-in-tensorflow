@@ -8,7 +8,7 @@ tensorflow 1.0.0 is needed here. They re-named lots of functions, so the previou
 
 ## Quick guide
 
-You can run cifar10_train.py to train a ResNext on cifar10 and see how it works from the screen output (the code will download the data for you if you don't have them yet). It’s better to speicify a version identifier before running, since the training logs, checkpoints, and error.csv file will be saved in the folder with name logs_$version. 
+You can run cifar10_train.py to train a ResNeXt on cifar10 and see how it works from the screen output (the code will download the data for you if you don't have them yet). It’s better to speicify a version identifier before running, since the training logs, checkpoints, and error.csv file will be saved in the folder with name logs_$version. 
 
 `python cifar10_train.py --version='test'`
 
@@ -16,7 +16,7 @@ You may alter the shape of the model via the hyper-parameters. Typically a ResNe
 
 a is the total layer, which is defined by 9 * FLAGS.num_resnext_blocks + 2.
 
-b is the cardinality, which is defined by FLAGS.cardinality + 2.
+b is the cardinality, which is defined by FLAGS.cardinality.
 
 c is the number of channels in each split, which is defined by FLAGS.block_unit_depth
 

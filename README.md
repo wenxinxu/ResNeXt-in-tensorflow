@@ -26,6 +26,15 @@ python cifar10_train.py --version='test',num_resnext_blocks=3,cardinality=4
 ```
 More explanations about the hyper-parameters can be found [here](https://github.com/wenxinxu/resnet-in-tensorflow#hyper-parameters)
 
+### Files included
+1. hyper-parameters.py defines the hyper-parameters related to train, ResNeXt structure, data augmentation, etc.
+
+2. cifar10_input.py includes the data I/O, pre-processing of images and data augmentation
+
+3. resNeXt.py is the main body of ResNeXt network
+
+4. cifar10_train.py is responsible for the training and validation
+
 ## TODO:
 1. Train the model and generate the learning curve
 2. Data augmentation: cv2 is not compatible w/ tensorflow 1.0.0, so I need to:

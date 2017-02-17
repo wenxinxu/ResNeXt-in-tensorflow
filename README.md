@@ -1,6 +1,6 @@
 # ResNeXt in Tensorflow
 
-This is an implementation of [ResNext](https://arxiv.org/abs/1611.05431) in tensorflow. The tensorboard visualization of the detailed model structure (ResNeXt-29, 4x64d as example) is shown in [graph](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph.png), [block](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block.png), and [split](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block_split.png). 
+This is an implementation of [ResNeXt](https://arxiv.org/abs/1611.05431) in tensorflow. The tensorboard visualization of the detailed model structure (ResNeXt-29, 4x64d as example) is shown in [graph](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph.png), [block](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block.png), and [split](https://github.com/wenxinxu/ResNeXt-in-tensorflow/blob/master/figure/graph_block_split.png). 
 
 I implemented the blocks with both methods in Figure 3b (split->concat) and Figure 3c (grouped convolutions). The grouped conv method almost doubles the speed of the split-and-concat. 
 

@@ -20,7 +20,7 @@ To play with these hyper-parameters, you could either change inside the hyper-pa
 ```
 python cifar10_train.py --version='test',num_resnext_blocks=3,cardinality=4
 ```
-More explanations about the hyper-parameters can be found [here](https://github.com/wenxinxu/resnet-in-tensorflow)
+More explanations about the hyper-parameters can be found [here](https://github.com/wenxinxu/resnet-in-tensorflow#hyper-parameters)
 
 ## TODO:
 1. Train the model and generate the learning curve

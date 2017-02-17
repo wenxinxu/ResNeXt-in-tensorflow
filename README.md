@@ -15,7 +15,9 @@ You can run cifar10_train.py to train a ResNext on cifar10 and see how it works 
 You may alter the shape of the model via the hyper-parameters. Typically a ResNeXt is represented as 'ResNeXt-a, b*c'. 
 
 a is the total layer, which is defined by 9 * FLAGS.num_resnext_blocks + 2.
+
 b is the cardinality, which is defined by FLAGS.cardinality + 2.
+
 c is the number of channels in each split, which is defined by FLAGS.block_unit_depth
 
 To play with these hyper-parameters, you could either change inside the hyper-parameters.py or use the following commands:

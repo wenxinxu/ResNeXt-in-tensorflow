@@ -7,14 +7,16 @@ FLAGS = tf.app.flags.FLAGS
 
 ## The following flags define hyper-parameters that specifically characterize ResNeXt
 
-tf.app.flags.DEFINE_integer('cardinality', 4, '''Cadinality, number of paths in each block''')
+tf.app.flags.DEFINE_integer('cardinality', 2, '''Cadinality, number of paths in each block''')
 tf.app.flags.DEFINE_integer('block_unit_depth', 64, '''the depth of each split. 64 for cifar10
 in Figure 7 of the paper''')
+tf.app.flags.DEFINE_string('bottleneck_implementation', 'c', '''To use Figure 3b or 3c to
+implement''')
 
 
 ## The following flags are related to save paths, tensorboard outputs and screen outputs
 
-tf.app.flags.DEFINE_string('version', 'test', '''A version number defining the directory to save
+tf.app.flags.DEFINE_string('version', 'v0', '''A version number defining the directory to save
 logs and checkpoints''')
 tf.app.flags.DEFINE_integer('report_freq', 391, '''Steps takes to output errors on the screen
 and write summaries''')

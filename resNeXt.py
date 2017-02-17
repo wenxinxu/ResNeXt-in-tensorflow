@@ -17,8 +17,8 @@ def activation_summary(x):
     :return: Add histogram summary and scalar summary of the sparsity of the tensor
     '''
     tensor_name = x.op.name
-    tf.histogram_summary(tensor_name + '/activations', x)
-    tf.scalar_summary(tensor_name + '/sparsity', tf.nn.zero_fraction(x))
+    tf.summary.histogram(tensor_name + '/activations', x)
+    tf.summary.scalar(tensor_name + '/sparsity', tf.nn.zero_fraction(x))
 
 
 def create_variables(name, shape, initializer=tf.contrib.layers.xavier_initializer(), is_fc_layer=False):
@@ -37,7 +37,7 @@ def create_variables(name, shape, initializer=tf.contrib.layers.xavier_initializ
     else:
         regularizer = tf.contrib.layers.l2_regularizer(scale=FLAGS.weight_decay)
 
-    new_variables = tf.get_variable(name, shape=shape, initializer=initializer,
+    new_variables = tf.get_variable(name=name, shape=shape, initializer=initializer,
                                     regularizer=regularizer)
     return new_variables
 
@@ -51,7 +51,7 @@ def output_layer(input_layer, num_labels):
     input_dim = input_layer.get_shape().as_list()[-1]
     fc_w = create_variables(name='fc_weights', shape=[input_dim, num_labels], is_fc_layer=True,
                             initializer=tf.uniform_unit_scaling_initializer(factor=1.0))
-    fc_b = create_variables(name='fc_bias', shape=[num_labels], initializer=tf.zeros_initializer)
+    fc_b = create_variables(name='fc_bias', shape=[num_labels], initializer=tf.zeros_initializer())
 
     fc_h = tf.matmul(input_layer, fc_w) + fc_b
     return fc_h
@@ -97,14 +97,15 @@ def conv_bn_relu_layer(input_layer, filter_shape, stride, relu=True):
     return output
 
 
-def bottleneck_b(input_layer, stride):
+def split(input_layer, stride):
     '''
-    The bottleneck structure in Figure 3b of the paper. It takes an input tensor. Conv it by [1, 1,
+    The split structure in Figure 3b of the paper. It takes an input tensor. Conv it by [1, 1,
     64] filter, and then conv the result by [3, 3, 64]. Return the
     final resulted tensor, which is in shape of [batch_size, input_height, input_width, 64]
 
     :param input_layer: 4D tensor in shape of [batch_size, input_height, input_width,
     input_channel]
+    :param stride: int. 1 or 2. If want to shrink the image size, then stride = 2
     :return: 4D tensor in shape of [batch_size, input_height, input_width, input_channel/64]
     '''
 
@@ -119,6 +120,42 @@ def bottleneck_b(input_layer, stride):
         conv = conv_bn_relu_layer(conv, filter_shape=[3, 3, num_filter, num_filter], stride=1)
 
     return conv
+
+
+def bottleneck_b(input_layer, stride):
+    '''
+    The bottleneck strucutre in Figure 3b. Concatenates all the splits
+    :param input_layer: 4D tensor in shape of [batch_size, input_height, input_width,
+    input_channel]
+    :param stride: int. 1 or 2. If want to shrink the image size, then stride = 2
+    :return: 4D tensor in shape of [batch_size, output_height, output_width, output_channel]
+    '''
+    split_list = []
+    for i in range(FLAGS.cardinality):
+        with tf.variable_scope('split_%i'%i):
+            splits = split(input_layer=input_layer, stride=stride)
+        split_list.append(splits)
+
+    # Concatenate splits and check the dimension
+    concat_bottleneck = tf.concat(values=split_list, axis=3, name='concat')
+
+    return concat_bottleneck
+
+
+def bottleneck_c(input_layer, stride):
+    input_channel = input_layer.get_shape().as_list()[-1]
+    bottleneck_depth = FLAGS.block_unit_depth
+    with tf.variable_scope('bottleneck_c_l1'):
+        l1 = conv_bn_relu_layer(input_layer=input_layer,
+                                filter_shape=[1, 1, input_channel, bottleneck_depth],
+                                stride=stride)
+    with tf.variable_scope('group_conv'):
+        filter = create_variables(name='depthwise_filter', shape=[3, 3, bottleneck_depth, FLAGS.cardinality])
+        l2 = tf.nn.depthwise_conv2d(input=l1,
+                                    filter=filter,
+                                    strides=[1, 1, 1, 1],
+                                    padding='SAME')
+    return l2
 
 
 def resnext_block(input_layer, output_channel):
@@ -142,14 +179,12 @@ def resnext_block(input_layer, output_channel):
     else:
         raise ValueError('Output and input channel does not match in residual blocks!!!')
 
-    split_list = []
-    for i in range(FLAGS.cardinality):
-        with tf.variable_scope('split_%i'%i):
-            split = bottleneck_b(input_layer=input_layer, stride=stride)
-        split_list.append(split)
+    if FLAGS.bottleneck_implementation == 'b':
+        concat_bottleneck = bottleneck_b(input_layer, stride)
+    else:
+        assert FLAGS.bottleneck_implementation == 'c'
+        concat_bottleneck = bottleneck_c(input_layer, stride)
 
-    # Concatenate splits and check the dimension
-    concat_bottleneck = tf.concat(values=split_list, concat_dim=3, name='concat')
     bottleneck_depth = concat_bottleneck.get_shape().as_list()[-1]
     assert bottleneck_depth == FLAGS.block_unit_depth * FLAGS.cardinality
 

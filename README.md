@@ -27,6 +27,7 @@ More explanations about the hyper-parameters can be found [here](https://github.
 ## TODO:
 1. Train the model and generate the learning curve
 2. Data augmentation: cv2 is not compatible w/ tensorflow 1.0.0, so I need to:
+
     a. Wait for a new version of opencv
 
     or

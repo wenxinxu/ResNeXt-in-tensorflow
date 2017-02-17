@@ -8,7 +8,7 @@ tensorflow 1.0.0 is needed here. They re-named lots of functions, so the previou
 
 ## Quick guide
 
-You can run cifar10_train.py to train a ResNext in cifar10 and see how it works from the screen output (the code will download the data for you if you don't have it yet). It’s better to speicify version identifier before running, since the training logs, checkpoints, and error.csv file will be saved in the folder with name logs_$version. 
+You can run cifar10_train.py to train a ResNext on cifar10 and see how it works from the screen output (the code will download the data for you if you don't have them yet). It’s better to speicify a version identifier before running, since the training logs, checkpoints, and error.csv file will be saved in the folder with name logs_$version. 
 
 `python cifar10_train.py --version='test'`
 

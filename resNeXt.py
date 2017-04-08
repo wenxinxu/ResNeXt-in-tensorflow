@@ -145,7 +145,7 @@ def bottleneck_b(input_layer, stride):
     return concat_bottleneck
 
 
-def bottleneck_c(input_layer, stride):
+def bottleneck_c1(input_layer, stride):
     '''
     The bottleneck strucutre in Figure 3c. Grouped convolutions
     :param input_layer: 4D tensor in shape of [batch_size, input_height, input_width,
@@ -165,6 +165,28 @@ def bottleneck_c(input_layer, stride):
                                     filter=filter,
                                     strides=[1, 1, 1, 1],
                                     padding='SAME')
+    return l2
+
+
+def bottleneck_c(input_layer, stride):
+    '''
+    The bottleneck strucutre in Figure 3c. Grouped convolutions
+    :param input_layer: 4D tensor in shape of [batch_size, input_height, input_width,
+    input_channel]
+    :param stride: int. 1 or 2. If want to shrink the image size, then stride = 2
+    :return: 4D tensor in shape of [batch_size, output_height, output_width, output_channel]
+    '''
+    input_channel = input_layer.get_shape().as_list()[-1]
+    bottleneck_depth = FLAGS.block_unit_depth * FLAGS.cardinality
+    with tf.variable_scope('bottleneck_c_l1'):
+        l1 = conv_bn_relu_layer(input_layer=input_layer,
+                                filter_shape=[1, 1, input_channel, bottleneck_depth],
+                                stride=stride)
+    with tf.variable_scope('group_conv'):
+        filter = create_variables(name='depthwise_filter', shape=[3, 3, bottleneck_depth, FLAGS.cardinality])
+        l2 = conv_bn_relu_layer(input_layer=l1,
+                                filter_shape=[3, 3, bottleneck_depth, bottleneck_depth],
+                                stride=1)
     return l2
 
 

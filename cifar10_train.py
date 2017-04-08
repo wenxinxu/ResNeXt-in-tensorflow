@@ -1,11 +1,10 @@
 # Coder: Wenxin Xu
 # Github: https://github.com/wenxinxu/ResNeXt-in-tensorflow
 # ==============================================================================
-
+from cifar10_input import *
 from resNeXt import *
 from datetime import datetime
 import time
-from cifar10_input import *
 import pandas as pd
 
 
@@ -115,7 +114,6 @@ class Train(object):
         print '----------------------------'
 
         for step in xrange(FLAGS.train_steps):
-
             train_batch_data, train_batch_labels = self.generate_augment_train_batch(all_data, all_labels,
                                                                         FLAGS.train_batch_size)
 

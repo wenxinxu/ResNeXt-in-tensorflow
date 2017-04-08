@@ -7,7 +7,7 @@ import sys
 import numpy as np
 import cPickle
 import os
-# import cv2
+import cv2
 
 data_dir = 'cifar10_data'
 full_data_dir = 'cifar10_data/cifar-10-batches-py/data_batch_'
@@ -115,8 +115,8 @@ def horizontal_flip(image, axis):
     :return: 3D image after flip
     '''
     flip_prop = np.random.randint(low=0, high=2)
-    # if flip_prop == 0:
-    #     image = cv2.flip(image, axis)
+    if flip_prop == 0:
+        image = cv2.flip(image, axis)
 
     return image
 

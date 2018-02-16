@@ -117,10 +117,9 @@ def split(input_layer, stride):
     # according to Figure 7, they used 64 as # filters for all cifar10 task
 
     with tf.variable_scope('bneck_reduce_size'):
-        conv = conv_bn_relu_layer(input_layer, filter_shape=[1, 1, input_channel, num_filter],
-                                  stride=stride)
+        conv = conv_bn_relu_layer(input_layer, filter_shape=[1, 1, input_channel, num_filter], stride=1)
     with tf.variable_scope('bneck_conv'):
-        conv = conv_bn_relu_layer(conv, filter_shape=[3, 3, num_filter, num_filter], stride=1)
+        conv = conv_bn_relu_layer(conv, filter_shape=[3, 3, num_filter, num_filter], stride=stride)
 
     return conv
 
